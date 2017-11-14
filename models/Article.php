@@ -333,6 +333,8 @@ class Article extends ActiveRecord implements ScanInterface
     public function afterDelete()
     {
         Yii::$app->queue->push(new UpdateExtraCounterJob(['field' => 'articles', 'counter' => -1, 'user_id' => $this->user_id]));
+        Support::deleteAll(['model_class' => Support::TYPE, 'model_id' => $this->id]);
+        Comment::deleteAll(['model_class' => Comment::TYPE, 'model_id' => $this->id]);
         parent::afterDelete();
 
     }

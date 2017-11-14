@@ -37,7 +37,7 @@ class ArticleController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'create' => ['post'],
+                    'delete' => ['post'],
                 ],
             ],
             'access' => [
@@ -45,12 +45,12 @@ class ArticleController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create'],
+                        'actions' => ['index', 'view'],
                         'roles' => ['@', '?']
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['support','delete'],
+                        'actions' => ['create','update', 'support', 'delete', 'upload'],
                         'roles' => ['@']
                     ],
                 ],
