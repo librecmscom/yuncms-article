@@ -11,7 +11,7 @@
     "yiisoft/yii2": "~2.0.6",
     "yiisoft/yii2-queue": "~2.0.0",
     "xutl/yii2-fileupload-widget": "~1.0",
-    "yuncms/yii2-ueditor-widget": "~1.0.0",
+    "yuncms/yuncms-ueditor-widget": "~2.0.0",
     "yuncms/yuncms-user": "~2.0",
     "yuncms/yuncms-comment": "~2.0",
     "yuncms/yuncms-collection": "~2.0",
