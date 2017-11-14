@@ -7,7 +7,6 @@
 
 namespace yuncms\article\jobs;
 
-use Yii;
 use yii\base\BaseObject;
 use yii\queue\Queue;
 use yii\queue\RetryableJob;
