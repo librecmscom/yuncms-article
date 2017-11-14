@@ -14,7 +14,6 @@ use yuncms\core\ScanInterface;
 use yuncms\core\jobs\ScanTextJob;
 use yuncms\tag\models\Tag;
 use yuncms\user\models\User;
-use yuncms\collection\models\Collection;
 use yuncms\user\jobs\UpdateExtraCounterJob;
 
 /**
@@ -37,11 +36,15 @@ use yuncms\user\jobs\UpdateExtraCounterJob;
  * @property int $created_at
  * @property int $updated_at
  * @property int $published_at
- *
  * @property int $category_id
  *
  * @property-read boolean $isActive
  * @property-read boolean $isAuthor
+ * @property-read boolean $isCollected
+ * @property-read boolean $isSupported
+ * @property-read Category $category
+ * @property-read Tag[] $tags
+ * @property User $user
  *
  * @package yuncms\article\models
  */
@@ -191,7 +194,16 @@ class Article extends ActiveRecord implements ScanInterface
      */
     public function getCollections()
     {
-        return $this->hasMany(Collection::className(), ['model_id' => 'id'])->onCondition(['model' => static::className()]);
+        return $this->hasMany(Collection::className(), ['model_id' => 'id'])->onCondition(['model_class' => Collection::TYPE]);
+    }
+
+    /**
+     * Collection Relation
+     * @return \yii\db\ActiveQueryInterface
+     */
+    public function getSupports()
+    {
+        return $this->hasMany(Support::className(), ['model_id' => 'id'])->onCondition(['model_class' => Collection::TYPE]);
     }
 
     /**
@@ -204,12 +216,22 @@ class Article extends ActiveRecord implements ScanInterface
     }
 
     /**
-     * Favorite Relation
-     * @return \yii\db\ActiveQueryInterface
+     * 是否已经收藏过
+     * @param int $id
+     * @return bool
      */
-    public function getCollection()
+    public function isCollected()
     {
-        return $this->hasOne(Collection::className(), ['model_id' => 'id'])->onCondition(['model' => get_class($this)]);
+        return $this->getCollections()->andWhere(['model_id' => $this->id])->exists();
+    }
+
+    /**
+     * 是否赞过
+     * @return bool
+     */
+    public function isSupported()
+    {
+        return $this->getSupports()->andWhere(['model_id' => $this->id])->exists();
     }
 
     /**
@@ -335,6 +357,7 @@ class Article extends ActiveRecord implements ScanInterface
         Yii::$app->queue->push(new UpdateExtraCounterJob(['field' => 'articles', 'counter' => -1, 'user_id' => $this->user_id]));
         Support::deleteAll(['model_class' => Support::TYPE, 'model_id' => $this->id]);
         Comment::deleteAll(['model_class' => Comment::TYPE, 'model_id' => $this->id]);
+        Collection::deleteAll(['model_class' => Collection::TYPE, 'model_id' => $this->id]);
         parent::afterDelete();
 
     }

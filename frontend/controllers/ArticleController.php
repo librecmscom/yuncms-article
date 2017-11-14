@@ -16,6 +16,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
+use yuncms\article\models\Collection;
 use yuncms\article\models\Support;
 use yuncms\tag\models\Tag;
 use yuncms\article\jobs\UpdateViewsJob;
@@ -38,6 +39,8 @@ class ArticleController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
+                    'support' => ['post'],
+                    'collection' => ['post'],
                 ],
             ],
             'access' => [
@@ -50,7 +53,7 @@ class ArticleController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['create','update', 'support', 'delete', 'upload'],
+                        'actions' => ['create', 'update', 'support', 'delete', 'upload', 'collection'],
                         'roles' => ['@']
                     ],
                 ],
@@ -114,7 +117,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * 提交评论
+     * 文章点赞
      * @return array
      * @throws NotFoundHttpException
      */
@@ -122,13 +125,34 @@ class ArticleController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $source = $this->findModel(Yii::$app->request->post('model_id'));
-        if (Support::find()->where(['model_id' => $source->id])->exists()) {
+        if($source->isSupported){
             return ['status' => 'supported'];
+        } else {
+            $model = new Support();
+            if ($model->load(Yii::$app->request->post(), '') && $model->save()) {
+                $source->updateCounters(['supports' => 1]);
+            }
         }
-        $model = new Support();
+        return ['status' => 'success'];
+    }
+
+    /**
+     * 收藏文章
+     * @return array
+     */
+    public function actionCollection()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $source = $this->findModel(Yii::$app->request->post('model_id'));
+        if (($collect = Collection::find()->where(['model_id' => $source->id])->one()) != null) {
+            $collect->delete();
+            return ['status' => 'unCollect'];
+        }
+        $model = new Collection();
+        $model->subject = $source->title;
         if ($model->load(Yii::$app->request->post(), '') && $model->save()) {
-            $source->updateCounters(['supports' => 1]);
-            return ['status' => 'success'];
+            $source->updateCounters(['collections' => 1]);
+            return ['status' => 'collected'];
         }
     }
 

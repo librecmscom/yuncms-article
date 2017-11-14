@@ -18,11 +18,39 @@ window.yii.article = (function ($) {
                 var model_id = btn_support.data('model_id');
                 var support_num = parseInt(btn_support.data('support_num'));
                 $.post("/article/article/support", {model_id: model_id}, function (result) {
-                    if (result.status == 'success') {
+                    if (result.status === 'success') {
                         support_num++;
                     }
                     btn_support.html(support_num + ' 已推荐');
                     btn_support.data('support_num', support_num);
+                });
+            });
+
+            $(document).on('click', '[data-target="article-collect"]', function (e) {
+                $(this).button('loading');
+                var collect_btn = $(this);
+                var model_id = $(this).data('model_id');
+                var show_num = $(this).data('show_num');
+                $.post("/article/article/collection", {model_id: model_id}, function (result) {
+                    collect_btn.removeClass('disabled');
+                    collect_btn.removeAttr('disabled');
+                    if (result.status === 'collected') {
+                        collect_btn.html('已收藏');
+                        collect_btn.addClass('active');
+                    } else {
+                        collect_btn.html('收藏');
+                        collect_btn.removeClass('active');
+                    }
+
+                    /*是否操作收藏数*/
+                    if (Boolean(show_num)) {
+                        var collect_num = collect_btn.nextAll("#collection-num").html();
+                        if (result.status === 'collected') {
+                            collect_btn.nextAll("#collection-num").html(parseInt(collect_num) + 1);
+                        } else {
+                            collect_btn.nextAll("#collection-num").html(parseInt(collect_num) - 1);
+                        }
+                    }
                 });
             });
         },

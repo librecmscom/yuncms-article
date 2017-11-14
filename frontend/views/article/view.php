@@ -1,10 +1,11 @@
 <?php
 /* @var $this yii\web\View */
-/** @var \yuncms\article\models\Acticle $model */
+
+/** @var \yuncms\article\models\Article $model */
+
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yuncms\article\frontend\assets\ArticlePluginAsset;
-use yuncms\collection\models\Collection;
 
 ArticlePluginAsset::register($this);
 $this->title = Html::encode($model->title);
@@ -56,22 +57,20 @@ $this->registerJs('
 
             </div>
             <div class="text-center mt-10 mb-20">
-
                 <button data-target="article-support" class="btn btn-success btn-lg mr-5"
                         data-model_id="<?= $model->id ?>"
                         data-support_num="<?= $model->supports ?>"><?= $model->supports ?> <?= Yii::t('article', 'Support'); ?>
                 </button>
-                <?php if (!Yii::$app->user->isGuest && Collection::isCollected(get_class($model), $model->id)): ?>
-                    <button data-target="collect-button" class="btn btn-default btn-lg"
+
+                <?php if (!Yii::$app->user->isGuest && $model->isCollected): ?>
+                    <button data-target="article-collect" class="btn btn-default btn-lg"
                             data-loading-text="<?= Yii::t('article', 'Loading...'); ?>"
-                            data-source_type="article"
-                            data-source_id="<?= $model->id ?>"> <?= Yii::t('article', 'collected'); ?>
+                            data-model_id="<?= $model->id ?>"> <?= Yii::t('article', 'collected'); ?>
                     </button>
                 <?php else: ?>
-                    <button data-target="collect-button" class="btn btn-default btn-lg"
+                    <button data-target="article-collect" class="btn btn-default btn-lg"
                             data-loading-text="<?= Yii::t('article', 'Loading...'); ?>"
-                            data-source_type="article"
-                            data-source_id="<?= $model->id ?>"> <?= Yii::t('article', 'Collect'); ?>
+                            data-model_id="<?= $model->id ?>"> <?= Yii::t('article', 'Collect'); ?>
                     </button>
                 <?php endif; ?>
             </div>
