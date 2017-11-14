@@ -17,7 +17,7 @@ window.yii.article = (function ($) {
                 var btn_support = $(this);
                 var model_id = btn_support.data('model_id');
                 var support_num = parseInt(btn_support.data('support_num'));
-                $.post("/article/support/create", {model_id: model_id}, function (result) {
+                $.post("/article/article/support", {model_id: model_id}, function (result) {
                     if (result.status == 'success') {
                         support_num++;
                     }

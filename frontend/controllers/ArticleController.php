@@ -8,11 +8,15 @@
 namespace yuncms\article\frontend\controllers;
 
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\data\ActiveDataProvider;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
+use yuncms\article\models\Support;
 use yuncms\tag\models\Tag;
 use yuncms\article\jobs\UpdateViewsJob;
 use yuncms\article\models\ArticleIndex;
@@ -24,6 +28,35 @@ use yuncms\article\models\Article;
  */
 class ArticleController extends Controller
 {
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'create' => ['post'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'create'],
+                        'roles' => ['@', '?']
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['support','delete'],
+                        'roles' => ['@']
+                    ],
+                ],
+            ],
+        ];
+    }
 
     public function actions()
     {
@@ -77,6 +110,25 @@ class ArticleController extends Controller
             return $this->render('tag', ['model' => $model, 'dataProvider' => $dataProvider]);
         } else {
             throw new NotFoundHttpException (Yii::t('yii', 'The requested page does not exist.'));
+        }
+    }
+
+    /**
+     * 提交评论
+     * @return array
+     * @throws NotFoundHttpException
+     */
+    public function actionSupport()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $source = $this->findModel(Yii::$app->request->post('model_id'));
+        if (Support::find()->where(['model_id' => $source->id])->exists()) {
+            return ['status' => 'supported'];
+        }
+        $model = new Support();
+        if ($model->load(Yii::$app->request->post(), '') && $model->save()) {
+            $source->updateCounters(['supports' => 1]);
+            return ['status' => 'success'];
         }
     }
 
