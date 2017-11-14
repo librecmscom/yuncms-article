@@ -62,7 +62,7 @@ $this->registerJs('
                         data-support_num="<?= $model->supports ?>"><?= $model->supports ?> <?= Yii::t('article', 'Support'); ?>
                 </button>
 
-                <?php if (!Yii::$app->user->isGuest && $model->isCollected): ?>
+                <?php if (!Yii::$app->user->isGuest && $model->isCollected(Yii::$app->user->getId())): ?>
                     <button data-target="article-collect" class="btn btn-default btn-lg"
                             data-loading-text="<?= Yii::t('article', 'Loading...'); ?>"
                             data-model_id="<?= $model->id ?>"> <?= Yii::t('article', 'collected'); ?>

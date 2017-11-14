@@ -40,8 +40,6 @@ use yuncms\user\jobs\UpdateExtraCounterJob;
  *
  * @property-read boolean $isActive
  * @property-read boolean $isAuthor
- * @property-read boolean $isCollected
- * @property-read boolean $isSupported
  * @property-read Category $category
  * @property-read Tag[] $tags
  * @property User $user
@@ -217,21 +215,22 @@ class Article extends ActiveRecord implements ScanInterface
 
     /**
      * 是否已经收藏过
-     * @param int $id
+     * @param int $user_id
      * @return bool
      */
-    public function isCollected()
+    public function isCollected($user_id)
     {
-        return $this->getCollections()->andWhere(['model_id' => $this->id])->exists();
+        return $this->getCollections()->andWhere(['user_id' => $user_id])->exists();
     }
 
     /**
      * 是否赞过
+     * @param int $user_id
      * @return bool
      */
-    public function isSupported()
+    public function isSupported($user_id)
     {
-        return $this->getSupports()->andWhere(['model_id' => $this->id])->exists();
+        return $this->getSupports()->andWhere(['user_id' => $user_id])->exists();
     }
 
     /**
@@ -248,7 +247,7 @@ class Article extends ActiveRecord implements ScanInterface
             } elseif ($suggestion == 'block') {
                 $model->setRejected('');
             } elseif ($suggestion == 'review') { //人工审核，不做处理
-
+                return;
             }
         }
     }

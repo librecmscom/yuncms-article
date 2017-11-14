@@ -125,7 +125,7 @@ class ArticleController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $source = $this->findModel(Yii::$app->request->post('model_id'));
-        if($source->isSupported){
+        if($source->isSupported(Yii::$app->user->getId())){
             return ['status' => 'supported'];
         } else {
             $model = new Support();
