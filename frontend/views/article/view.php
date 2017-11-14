@@ -103,7 +103,7 @@ $this->registerJs('
                             <a href="#" class="text-muted collapse-cancel"
                                data-collapse_id="comments-<?= $model->id ?>">Clean</a>
                             <button type="submit" class="btn btn-primary btn-sm ml-10 article-comment-btn"
-                                    data-source_id="<?= $model->id ?>"
+                                    data-model_id="<?= $model->id ?>"
                                     data-to_user_id="0"><?= Yii::t('article', 'Comment'); ?>
                             </button>
                         </div>

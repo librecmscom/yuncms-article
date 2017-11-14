@@ -6,28 +6,28 @@ window.yii.article = (function ($) {
         init: function () {
             console.info('init article.');
             $(".article-comment-btn").click(function () {
-                var source_id = $(this).data('source_id');
+                var model_id = $(this).data('model_id');
                 var to_user_id = $(this).data('to_user_id');
-                var content = $("#comment-" + "content-" + source_id).val();
-                pub.add_comment(source_id, content, to_user_id);
-                $("#comment-content-" + source_id + "").val('');
+                var content = $("#comment-" + "content-" + model_id).val();
+                pub.add_comment(model_id, content, to_user_id);
+                $("#comment-content-" + model_id + "").val('');
             });
         },
 
         /**
          * 发布评论
-         * @param source_id
+         * @param model_id
          * @param content
          * @param to_user_id
          */
-        add_comment: function (source_id, content, to_user_id) {
-            var postData = {source_id: source_id, content: content};
+        add_comment: function (model_id, content, to_user_id) {
+            var postData = {model_id: model_id, content: content};
             if (to_user_id > 0) {
                 postData.to_user_id = to_user_id;
             }
             $.post('/article/comment/create', postData, function (html) {
-                $("#comments-" + source_id + " .widget-comment-list").append(html);
-                $("#comment-" + "content-" + source_id).val('');
+                $("#comments-" + model_id + " .widget-comment-list").append(html);
+                $("#comment-" + "content-" + model_id).val('');
             });
         },
 
