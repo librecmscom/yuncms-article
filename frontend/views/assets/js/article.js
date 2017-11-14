@@ -12,6 +12,19 @@ window.yii.article = (function ($) {
                 pub.add_comment(model_id, content, to_user_id);
                 $("#comment-content-" + model_id + "").val('');
             });
+
+            $(document).on('click', '[data-target="article-support"]', function (e) {
+                var btn_support = $(this);
+                var model_id = btn_support.data('model_id');
+                var support_num = parseInt(btn_support.data('support_num'));
+                $.post("/article/support/create", {model_id: model_id}, function (result) {
+                    if (result.status == 'success') {
+                        support_num++;
+                    }
+                    btn_support.html(support_num + ' 已推荐');
+                    btn_support.data('support_num', support_num);
+                });
+            });
         },
 
         /**
@@ -38,7 +51,6 @@ window.yii.article = (function ($) {
         clear_comments: function (id) {
             $("#comments-" + id + " .widget-comment-list").empty();
         },
-
 
         load_comments: function (id) {
             $.get('/article/comment/index', {id: id}, function (html) {

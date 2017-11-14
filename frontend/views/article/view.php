@@ -57,8 +57,8 @@ $this->registerJs('
             </div>
             <div class="text-center mt-10 mb-20">
 
-                <button data-target="support-button" class="btn btn-success btn-lg mr-5"
-                        data-source_id="<?= $model->id ?>" data-source_type="article"
+                <button data-target="article-support" class="btn btn-success btn-lg mr-5"
+                        data-model_id="<?= $model->id ?>"
                         data-support_num="<?= $model->supports ?>"><?= $model->supports ?> <?= Yii::t('article', 'Support'); ?>
                 </button>
                 <?php if (!Yii::$app->user->isGuest && Collection::isCollected(get_class($model), $model->id)): ?>
