@@ -1,0 +1,21 @@
+/*列表样式*/
+.article-stream{margin-bottom:10px}
+.article-list.top-indent{margin-top:-10px}
+.article-list-item{margin:0;border-bottom:1px solid #eee;padding:10px 0}
+.article-list-item .author{margin-bottom:5px;color:#999;font-size:13px}
+.article-list-item .author small{color:#ddd}
+.article-list-item .author a{color:#999;}
+.article-list-item .title{display:inline;margin:0 5px 0 0;font-size:16px}
+.article-list-item .title a{color:#333}
+.article-list-item .title a:hover{color:#017e66}
+.article-list-item .title a:visited{font-weight:400}
+.article-list-item .small-title{margin:0 0 5px;font-size:16px;}
+.article-list-item .split:before{content:"·";color:#ddd;}
+.article-list-item .summary{overflow:auto;overflow-x:hidden}
+.article-list-item .excerpt{margin:5px 0 0;height:42px;color:#777;font-size:13px;line-height:1.6;overflow:hidden}
+.article-list-item.highlight{background:#FFF9EB}
+.article-rank{float:left;margin-right:12px;padding-right:12px;font-size:16px;text-align:center;line-height:1.2;color:#666;}
+.article-rank small {display: block;font-size: 12px;}
+.article-rank .votes {margin-bottom: 8px;background: #f0f0f0;}
+.article-rank .plus {background: #009a61;color: #fff;}
+.article-rank .views, .article-rank .votes {display: block;padding-top: 3px;width: 45px;height: 40px;border-radius: 1px;}
