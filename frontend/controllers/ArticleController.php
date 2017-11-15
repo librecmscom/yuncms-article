@@ -125,7 +125,7 @@ class ArticleController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $source = $this->findModel(Yii::$app->request->post('model_id'));
-        if($source->isSupported(Yii::$app->user->getId())){
+        if ($source->isSupported(Yii::$app->user->getId())) {
             return ['status' => 'supported'];
         } else {
             $model = new Support();
@@ -144,7 +144,7 @@ class ArticleController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $source = $this->findModel(Yii::$app->request->post('model_id'));
-        if (($collect = Collection::find()->where(['model_id' => $source->id])->one()) != null) {
+        if (($collect = Collection::find()->where(['model_id' => $source->id, 'user_id' => Yii::$app->user->getId()])->one()) != null) {
             $collect->delete();
             return ['status' => 'unCollect'];
         }

@@ -9,14 +9,14 @@ namespace yuncms\article\jobs;
 
 use yii\base\BaseObject;
 use yii\queue\Queue;
-use yii\queue\RetryableJob;
+use yii\queue\RetryableJobInterface;
 use yuncms\article\models\Article;
 
 /**
  * 异步更新点击数
  * @package yuncms\article\jobs
  */
-class UpdateViewsJob extends BaseObject implements RetryableJob
+class UpdateViewsJob extends BaseObject implements RetryableJobInterface
 {
     public $id;
 
