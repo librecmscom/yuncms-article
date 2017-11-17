@@ -16,6 +16,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
+use yii\web\ServerErrorHttpException;
 use yuncms\article\models\Collection;
 use yuncms\article\models\Support;
 use yuncms\tag\models\Tag;
@@ -119,7 +120,7 @@ class ArticleController extends Controller
     /**
      * 文章点赞
      * @return array
-     * @throws NotFoundHttpException
+     * @throws ServerErrorHttpException
      */
     public function actionSupport()
     {
@@ -129,16 +130,18 @@ class ArticleController extends Controller
             return ['status' => 'supported'];
         } else {
             $model = new Support();
-            if ($model->load(Yii::$app->request->post(), '') && $model->save()) {
-                $source->updateCounters(['supports' => 1]);
+            $model->load(Yii::$app->request->post(), '');
+            if ($model->save() === false && !$model->hasErrors()) {
+                throw new ServerErrorHttpException('Failed to update the object for unknown reason.');
             }
+            return ['status' => 'success'];
         }
-        return ['status' => 'success'];
     }
 
     /**
      * 收藏文章
      * @return array
+     * @throws ServerErrorHttpException
      */
     public function actionCollection()
     {
@@ -147,11 +150,13 @@ class ArticleController extends Controller
         if (($collect = Collection::find()->where(['model_id' => $source->id, 'user_id' => Yii::$app->user->getId()])->one()) != null) {
             $collect->delete();
             return ['status' => 'unCollect'];
-        }
-        $model = new Collection();
-        $model->subject = $source->title;
-        if ($model->load(Yii::$app->request->post(), '') && $model->save()) {
-            $source->updateCounters(['collections' => 1]);
+        } else {
+            $model = new Collection();
+            $model->subject = $source->title;
+            $model->load(Yii::$app->request->post(), '');
+            if ($model->save() === false && !$model->hasErrors()) {
+                throw new ServerErrorHttpException('Failed to update the object for unknown reason.');
+            }
             return ['status' => 'collected'];
         }
     }
