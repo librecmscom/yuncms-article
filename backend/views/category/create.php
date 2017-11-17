@@ -6,7 +6,7 @@ use xutl\inspinia\Toolbar;
 use xutl\inspinia\Alert;
 
 /* @var $this yii\web\View */
-/* @var $model yuncms\article\models\Category */
+/* @var $model yuncms\article\models\ArticleCategory */
 
 $this->title = Yii::t('article', 'Create Category');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('article', 'Manage Category'), 'url' => ['index']];

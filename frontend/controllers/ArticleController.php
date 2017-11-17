@@ -17,8 +17,8 @@ use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
-use yuncms\article\models\Collection;
-use yuncms\article\models\Support;
+use yuncms\article\models\ArticleCollection;
+use yuncms\article\models\ArticleSupport;
 use yuncms\tag\models\Tag;
 use yuncms\article\jobs\UpdateViewsJob;
 use yuncms\article\models\ArticleIndex;
@@ -129,7 +129,7 @@ class ArticleController extends Controller
         if ($source->isSupported(Yii::$app->user->getId())) {
             return ['status' => 'supported'];
         } else {
-            $model = new Support();
+            $model = new ArticleSupport();
             $model->load(Yii::$app->request->post(), '');
             if ($model->save() === false && !$model->hasErrors()) {
                 throw new ServerErrorHttpException('Failed to update the object for unknown reason.');
@@ -147,11 +147,11 @@ class ArticleController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $source = $this->findModel(Yii::$app->request->post('model_id'));
-        if (($collect = Collection::find()->where(['model_id' => $source->id, 'user_id' => Yii::$app->user->getId()])->one()) != null) {
+        if (($collect = ArticleCollection::find()->where(['model_id' => $source->id, 'user_id' => Yii::$app->user->getId()])->one()) != null) {
             $collect->delete();
             return ['status' => 'unCollect'];
         } else {
-            $model = new Collection();
+            $model = new ArticleCollection();
             $model->subject = $source->title;
             $model->load(Yii::$app->request->post(), '');
             if ($model->save() === false && !$model->hasErrors()) {

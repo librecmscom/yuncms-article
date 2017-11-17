@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yuncms\article\models\Article;
-use yuncms\article\models\Category;
+use yuncms\article\models\ArticleCategory;
 use yuncms\ueditor\UEditor;
 use xutl\inspinia\ActiveForm;
 use xutl\fileupload\SingleUpload;
@@ -18,7 +18,7 @@ use xutl\fileupload\SingleUpload;
 <div class="hr-line-dashed"></div>
 <?= $form->field($model, 'sub_title')->textInput(['maxlength' => true]) ?>
 <div class="hr-line-dashed"></div>
-<?= $form->field($model, 'category_id')->dropDownList(ArrayHelper::map(Category::getDropDownList(), 'id', 'name')); ?>
+<?= $form->field($model, 'category_id')->dropDownList(ArrayHelper::map(ArticleCategory::getDropDownList(), 'id', 'name')); ?>
 <div class="hr-line-dashed"></div>
 <?= $form->field($model, 'status')->inline(true)->radioList($model->getStatusList()) ?>
 <div class="hr-line-dashed"></div>

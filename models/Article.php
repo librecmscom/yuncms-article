@@ -8,6 +8,7 @@
 namespace yuncms\article\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yuncms\core\ScanInterface;
@@ -40,7 +41,7 @@ use yuncms\user\jobs\UpdateExtraCounterJob;
  *
  * @property-read boolean $isActive
  * @property-read boolean $isAuthor
- * @property-read Category $category
+ * @property-read ArticleCategory $category
  * @property-read Tag[] $tags
  * @property User $user
  *
@@ -174,7 +175,7 @@ class Article extends ActiveRecord implements ScanInterface
      */
     public function getCategory()
     {
-        return $this->hasOne(Category::className(), ['id' => 'category_id']);
+        return $this->hasOne(ArticleCategory::className(), ['id' => 'category_id']);
     }
 
     /**
@@ -192,7 +193,7 @@ class Article extends ActiveRecord implements ScanInterface
      */
     public function getCollections()
     {
-        return $this->hasMany(Collection::className(), ['model_id' => 'id'])->onCondition(['model_class' => Collection::TYPE]);
+        return $this->hasMany(ArticleCollection::className(), ['model_id' => 'id'])->onCondition(['model_class' => ArticleCollection::TYPE]);
     }
 
     /**
@@ -201,7 +202,7 @@ class Article extends ActiveRecord implements ScanInterface
      */
     public function getSupports()
     {
-        return $this->hasMany(Support::className(), ['model_id' => 'id'])->onCondition(['model_class' => Collection::TYPE]);
+        return $this->hasMany(ArticleSupport::className(), ['model_id' => 'id'])->onCondition(['model_class' => ArticleCollection::TYPE]);
     }
 
     /**
@@ -354,9 +355,9 @@ class Article extends ActiveRecord implements ScanInterface
     public function afterDelete()
     {
         Yii::$app->queue->push(new UpdateExtraCounterJob(['field' => 'articles', 'counter' => -1, 'user_id' => $this->user_id]));
-        Support::deleteAll(['model_class' => Support::TYPE, 'model_id' => $this->id]);
-        Comment::deleteAll(['model_class' => Comment::TYPE, 'model_id' => $this->id]);
-        Collection::deleteAll(['model_class' => Collection::TYPE, 'model_id' => $this->id]);
+        ArticleSupport::deleteAll(['model_class' => ArticleSupport::TYPE, 'model_id' => $this->id]);
+        ArticleComment::deleteAll(['model_class' => ArticleComment::TYPE, 'model_id' => $this->id]);
+        ArticleCollection::deleteAll(['model_class' => ArticleCollection::TYPE, 'model_id' => $this->id]);
         parent::afterDelete();
 
     }

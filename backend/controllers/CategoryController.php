@@ -14,7 +14,7 @@ use yii\filters\VerbFilter;
 use yii\bootstrap\ActiveForm;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
-use yuncms\article\models\Category;
+use yuncms\article\models\ArticleCategory;
 
 /**
  * CategoryController implements the CRUD actions for Category model.
@@ -52,7 +52,7 @@ class CategoryController extends Controller
      */
     public function actionIndex()
     {
-        $query = Category::find()->orderBy(['sort' => SORT_ASC]);
+        $query = ArticleCategory::find()->orderBy(['sort' => SORT_ASC]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => false
@@ -82,9 +82,9 @@ class CategoryController extends Controller
      */
     public function actionCreate($parent = null)
     {
-        $model = new Category();
+        $model = new ArticleCategory();
         if (!is_null($parent)) {
-            $parent = Category::findOne(['id' => $parent]);
+            $parent = ArticleCategory::findOne(['id' => $parent]);
             if ($parent) {
                 $model->parent = $parent->id;
                 $model->parent_name = $parent->name;
@@ -151,7 +151,7 @@ class CategoryController extends Controller
     public function actionAutoComplete($query)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $rows = Category::find()->select(['id', 'name'])->where(['like', 'name', $query])->asArray()->all();
+        $rows = ArticleCategory::find()->select(['id', 'name'])->where(['like', 'name', $query])->asArray()->all();
         return $rows;
     }
 
@@ -159,12 +159,12 @@ class CategoryController extends Controller
      * Finds the Category model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Category the loaded model
+     * @return ArticleCategory the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function findModel($id)
     {
-        if (($model = Category::findOne($id)) !== null) {
+        if (($model = ArticleCategory::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException (Yii::t('yii', 'The requested page does not exist.'));

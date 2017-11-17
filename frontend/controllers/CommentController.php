@@ -13,9 +13,8 @@ use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
-use yuncms\article\frontend\models\CommentForm;
 use yuncms\article\models\Article;
-use yuncms\article\models\Comment;
+use yuncms\article\models\ArticleComment;
 
 /**
  * Class CommentController
@@ -61,7 +60,7 @@ class CommentController extends Controller
     public function actionIndex($id)
     {
         $model = $this->findModel($id);
-        $query = Comment::find()->where([
+        $query = ArticleComment::find()->where([
             'model_id' => $model->id,
         ])->active()->with('user');
 
@@ -81,8 +80,8 @@ class CommentController extends Controller
     public function actionCreate()
     {
         if (($source = $this->findModel(Yii::$app->request->post('model_id'))) != null) {
-            $model = new Comment();
-            $model->scenario = Comment::SCENARIO_CREATE;
+            $model = new ArticleComment();
+            $model->scenario = ArticleComment::SCENARIO_CREATE;
             if ($model->load(Yii::$app->request->post(), '') && $model->save()) {
                 $source->updateCounters(['comments' => 1]);
                 if ($model->to_user_id > 0) {

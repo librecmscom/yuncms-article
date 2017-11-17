@@ -8,14 +8,15 @@
 namespace yuncms\article\models;
 
 use Yii;
-use yuncms\article\jobs\UpdateSupportJob;
-use yuncms\support\models\SupportQuery;
+use yuncms\article\jobs\UpdateCollectionJob;
+use yuncms\collection\models\CollectionQuery;
 
 /**
  * Class Support
+ * @property string $subject
  * @package yuncms\article\models
  */
-class Support extends \yuncms\support\models\Support
+class ArticleCollection extends \yuncms\collection\models\Collection
 {
     const TYPE = 'yuncms\article\models\Article';
 
@@ -29,11 +30,11 @@ class Support extends \yuncms\support\models\Support
     }
 
     /**
-     * @return SupportQuery
+     * @return CollectionQuery
      */
     public static function find()
     {
-        return new SupportQuery(get_called_class(), ['model_class' => self::TYPE, 'tableName' => self::tableName()]);
+        return new CollectionQuery(get_called_class(), ['model_class' => self::TYPE, 'tableName' => self::tableName()]);
     }
 
     /**
@@ -43,7 +44,7 @@ class Support extends \yuncms\support\models\Support
     public function beforeSave($insert)
     {
         $this->model_class = self::TYPE;
-        Yii::$app->queue->push(new UpdateSupportJob(['id' => $this->model_id]));
+        Yii::$app->queue->push(new UpdateCollectionJob(['id' => $this->model_id]));
         return parent::beforeSave($insert);
     }
 }

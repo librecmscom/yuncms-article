@@ -9,7 +9,7 @@ namespace yuncms\article\frontend\models;
 
 use Yii;
 use yii\base\Model;
-use yuncms\article\models\Comment;
+use yuncms\article\models\ArticleComment;
 use yuncms\user\models\User;
 
 /**
@@ -49,7 +49,7 @@ class CommentForm extends Model
     public function save()
     {
         if ($this->validate()) {
-            $model = new Comment([
+            $model = new ArticleComment([
                 'model_id' => $this->model_id,
                 'user_id' => Yii::$app->user->id,
                 'content' => $this->content,

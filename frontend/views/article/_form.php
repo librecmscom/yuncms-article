@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
-use yuncms\article\models\Category;
+use yuncms\article\models\ArticleCategory;
 use yuncms\ueditor\UEditor;
 use xutl\fileupload\SingleUpload;
 
@@ -22,7 +22,7 @@ use xutl\fileupload\SingleUpload;
 
 
     <?php
-    $categories = Category::find()->select(['id', 'name', 'slug'])->where(['parent' => null])->with('categories')->orderBy(['sort' => SORT_ASC])->asArray()->all();
+    $categories = ArticleCategory::find()->select(['id', 'name', 'slug'])->where(['parent' => null])->with('categories')->orderBy(['sort' => SORT_ASC])->asArray()->all();
     if (Yii::$app->language == 'en-US') {
         foreach ($categories as $id => $category) {
             $categories[$id]['categories'] = ArrayHelper::map($category['categories'], 'id', 'slug');

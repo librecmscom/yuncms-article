@@ -27,7 +27,7 @@ use yuncms\collection\models\Collection;
  * @property int $frequency 热度
  * @package yuncms\article\models
  */
-class Category extends ActiveRecord
+class ArticleCategory extends ActiveRecord
 {
     /**
      * @var string 父栏目名称

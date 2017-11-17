@@ -3,13 +3,13 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use xutl\inspinia\ActiveForm;
-use yuncms\article\models\Category;
+use yuncms\article\models\ArticleCategory;
 
 /* @var \yii\web\View $this */
-/* @var yuncms\article\models\Category $model */
+/* @var yuncms\article\models\ArticleCategory $model */
 /* @var ActiveForm $form */
 
-$categories = Category::find()->select(['id', 'name'])->orderBy(['sort' => SORT_ASC])->asArray()->all();
+$categories = ArticleCategory::find()->select(['id', 'name'])->orderBy(['sort' => SORT_ASC])->asArray()->all();
 
 ?>
 <?php $form = ActiveForm::begin([

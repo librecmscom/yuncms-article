@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
 
 /**
- * @var \yuncms\article\models\Comment $model
+ * @var \yuncms\article\models\ArticleComment $model
  */
 ?>
 <div class="media-left">
