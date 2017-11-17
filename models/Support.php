@@ -7,6 +7,8 @@
 
 namespace yuncms\article\models;
 
+use Yii;
+use yuncms\article\jobs\UpdateSupportJob;
 use yuncms\support\models\SupportQuery;
 
 /**
@@ -41,6 +43,7 @@ class Support extends \yuncms\support\models\Support
     public function beforeSave($insert)
     {
         $this->model_class = self::TYPE;
+        Yii::$app->queue->push(new UpdateSupportJob(['id' => $this->model_id]));
         return parent::beforeSave($insert);
     }
 }

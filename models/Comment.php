@@ -7,6 +7,8 @@
 
 namespace yuncms\article\models;
 
+use Yii;
+use yuncms\article\jobs\UpdateCommentJob;
 use yuncms\comment\models\CommentQuery;
 
 /**
@@ -41,6 +43,7 @@ class Comment extends \yuncms\comment\models\Comment
     public function beforeSave($insert)
     {
         $this->model_class = self::TYPE;
+        Yii::$app->queue->push(new UpdateCommentJob(['id' => $this->model_id]));
         return parent::beforeSave($insert);
     }
 }

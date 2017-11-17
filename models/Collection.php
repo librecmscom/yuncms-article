@@ -7,6 +7,8 @@
 
 namespace yuncms\article\models;
 
+use Yii;
+use yuncms\article\jobs\UpdateCollectionJob;
 use yuncms\collection\models\CollectionQuery;
 
 /**
@@ -42,6 +44,7 @@ class Collection extends \yuncms\collection\models\Collection
     public function beforeSave($insert)
     {
         $this->model_class = self::TYPE;
+        Yii::$app->queue->push(new UpdateCollectionJob(['id' => $this->model_id]));
         return parent::beforeSave($insert);
     }
 }
