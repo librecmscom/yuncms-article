@@ -17,10 +17,10 @@ use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
+use yuncms\article\jobs\UpdateCounterJob;
 use yuncms\article\models\ArticleCollection;
 use yuncms\article\models\ArticleSupport;
 use yuncms\tag\models\Tag;
-use yuncms\article\jobs\UpdateViewsJob;
 use yuncms\article\models\ArticleIndex;
 use yuncms\article\models\Article;
 
@@ -178,7 +178,7 @@ class ArticleController extends Controller
         }
         if ($model && ($model->isActive || $model->isAuthor)) {
             if (!$model->isAuthor) {
-                Yii::$app->queue->push(new UpdateViewsJob(['id' => $model->id]));
+                Yii::$app->queue->push(new UpdateCounterJob(['id' => $model->id, 'field' => 'views', 'counters' => 1]));
             }
             return $this->render('view', [
                 'model' => $model,

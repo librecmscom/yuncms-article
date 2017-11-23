@@ -9,6 +9,7 @@ namespace yuncms\article\models;
 
 use Yii;
 use yuncms\article\jobs\UpdateCollectionJob;
+use yuncms\article\jobs\UpdateCounterJob;
 use yuncms\collection\models\CollectionQuery;
 
 /**
@@ -44,7 +45,16 @@ class ArticleCollection extends \yuncms\collection\models\Collection
     public function beforeSave($insert)
     {
         $this->model_class = self::TYPE;
-        Yii::$app->queue->push(new UpdateCollectionJob(['id' => $this->model_id]));
+        Yii::$app->queue->push(new UpdateCounterJob(['id' => $this->model_id, 'field' => 'collections', 'counters' => 1]));
         return parent::beforeSave($insert);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterDelete()
+    {
+        Yii::$app->queue->push(new UpdateCounterJob(['id' => $this->model_id, 'field' => 'collections', 'counters' => -1]));
+        parent::afterDelete();
     }
 }

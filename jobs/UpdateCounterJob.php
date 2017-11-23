@@ -4,6 +4,7 @@
  * @copyright Copyright (c) 2012 TintSoft Technology Co. Ltd.
  * @license http://www.tintsoft.com/license/
  */
+
 namespace yuncms\article\jobs;
 
 use yii\base\BaseObject;
@@ -11,9 +12,26 @@ use yii\queue\Queue;
 use yii\queue\RetryableJobInterface;
 use yuncms\article\models\Article;
 
-class UpdateCommentJob extends BaseObject implements RetryableJobInterface
+/**
+ * 异步更新计数器
+ * @package yuncms\article\jobs
+ */
+class UpdateCounterJob extends BaseObject implements RetryableJobInterface
 {
+    /**
+     * @var int
+     */
     public $id;
+
+    /**
+     * @var string 字段名
+     */
+    public $field;
+
+    /**
+     * @var integer
+     */
+    public $counters = 1;
 
     /**
      * @param Queue $queue
@@ -21,7 +39,7 @@ class UpdateCommentJob extends BaseObject implements RetryableJobInterface
     public function execute($queue)
     {
         if (($model = Article::findOne(['id' => $this->id])) != null) {
-            $model->updateCounters(['comments' => 1]);
+            $model->updateCounters([$this->field => $this->counters]);
         }
     }
 
