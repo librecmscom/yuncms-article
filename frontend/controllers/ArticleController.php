@@ -154,6 +154,7 @@ class ArticleController extends Controller
         } else {
             $model = new ArticleCollection();
             $model->subject = $source->title;
+            $model->model_id = $source->id;
             $model->load(Yii::$app->request->post(), '');
             if ($model->save() === false && !$model->hasErrors()) {
                 throw new ServerErrorHttpException('Failed to update the object for unknown reason.');

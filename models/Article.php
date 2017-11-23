@@ -193,7 +193,7 @@ class Article extends ActiveRecord implements ScanInterface
      */
     public function getCollections()
     {
-        return $this->hasMany(ArticleCollection::className(), ['model_id' => 'id'])->onCondition(['model_class' => ArticleCollection::TYPE]);
+        return $this->hasMany(ArticleCollection::className(), ['model_id' => 'id']);
     }
 
     /**
@@ -202,7 +202,7 @@ class Article extends ActiveRecord implements ScanInterface
      */
     public function getSupports()
     {
-        return $this->hasMany(ArticleSupport::className(), ['model_id' => 'id'])->onCondition(['model_class' => ArticleCollection::TYPE]);
+        return $this->hasMany(ArticleSupport::className(), ['model_id' => 'id']);
     }
 
     /**
