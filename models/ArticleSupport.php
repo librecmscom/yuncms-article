@@ -8,6 +8,7 @@
 namespace yuncms\article\models;
 
 use Yii;
+use yuncms\support\models\Support;
 use yuncms\article\jobs\UpdateCounterJob;
 use yuncms\support\models\SupportQuery;
 
@@ -15,7 +16,7 @@ use yuncms\support\models\SupportQuery;
  * Class Support
  * @package yuncms\article\models
  */
-class ArticleSupport extends \yuncms\support\models\Support
+class ArticleSupport extends Support
 {
     const TYPE = 'yuncms\article\models\Article';
 
@@ -43,7 +44,7 @@ class ArticleSupport extends \yuncms\support\models\Support
     public function beforeSave($insert)
     {
         $this->model_class = self::TYPE;
-        Yii::$app->queue->push(new UpdateCounterJob(['id' => $this->model_id, 'field' => 'supports', 'counters' => 1]));
+        Yii::$app->queue->push(new UpdateCounterJob(['id' => $this->model_id, 'field' => 'supports', 'counter' => 1]));
         return parent::beforeSave($insert);
     }
 
@@ -52,7 +53,7 @@ class ArticleSupport extends \yuncms\support\models\Support
      */
     public function afterDelete()
     {
-        Yii::$app->queue->push(new UpdateCounterJob(['id' => $this->model_id, 'field' => 'supports', 'counters' => -1]));
+        Yii::$app->queue->push(new UpdateCounterJob(['id' => $this->model_id, 'field' => 'supports', 'counter' => -1]));
         parent::afterDelete();
     }
 }

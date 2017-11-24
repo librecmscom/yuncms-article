@@ -8,14 +8,15 @@
 namespace yuncms\article\models;
 
 use Yii;
-use yuncms\article\jobs\UpdateCounterJob;
+use yuncms\comment\models\Comment;
 use yuncms\comment\models\CommentQuery;
+use yuncms\article\jobs\UpdateCounterJob;
 
 /**
  * Class Comment
  * @package yuncms\article\models
  */
-class ArticleComment extends \yuncms\comment\models\Comment
+class ArticleComment extends Comment
 {
     const TYPE = 'yuncms\article\models\Article';
 
@@ -43,7 +44,7 @@ class ArticleComment extends \yuncms\comment\models\Comment
     public function beforeSave($insert)
     {
         $this->model_class = self::TYPE;
-        Yii::$app->queue->push(new UpdateCounterJob(['id' => $this->model_id, 'field' => 'comments', 'counters' => 1]));
+        Yii::$app->queue->push(new UpdateCounterJob(['id' => $this->model_id, 'field' => 'comments', 'counter' => 1]));
         return parent::beforeSave($insert);
     }
 
@@ -52,7 +53,7 @@ class ArticleComment extends \yuncms\comment\models\Comment
      */
     public function afterDelete()
     {
-        Yii::$app->queue->push(new UpdateCounterJob(['id' => $this->model_id, 'field' => 'comments', 'counters' => -1]));
+        Yii::$app->queue->push(new UpdateCounterJob(['id' => $this->model_id, 'field' => 'comments', 'counter' => -1]));
         parent::afterDelete();
     }
 }

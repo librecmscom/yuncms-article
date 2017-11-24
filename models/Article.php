@@ -319,7 +319,11 @@ class Article extends ActiveRecord implements ScanInterface
         if ($insert) {
             $this->updateAttributes(['uuid' => $this->generateKey()]);
             /* 用户文章数+1 */
-            Yii::$app->queue->push(new UpdateExtraCounterJob(['field' => 'articles', 'counter' => 1, 'user_id' => $this->user_id]));
+            Yii::$app->queue->push(new UpdateExtraCounterJob([
+                'field' => 'articles',
+                'counter' => 1,
+                'user_id' => $this->user_id
+            ]));
         }
         if ($this->status == self::STATUS_REVIEW) {
             Yii::$app->queue->push(new ScanTextJob([
