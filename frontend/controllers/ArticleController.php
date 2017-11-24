@@ -71,6 +71,7 @@ class ArticleController extends Controller
         ];
     }
 
+
     public function actionIndex()
     {
         $query = Article::find()->active();

@@ -54,10 +54,10 @@ class Article extends ActiveRecord implements ScanInterface
     const SCENARIO_UPDATE = 'update';//更新
 
     //状态定义
-    const STATUS_DRAFT = 'draft';//草稿
-    const STATUS_REVIEW = 'review';//审核
-    const STATUS_REJECTED = 'rejected';//拒绝
-    const STATUS_PUBLISHED = 'published';//发布
+    const STATUS_DRAFT = 0b0;//草稿
+    const STATUS_REVIEW = 0b1;//审核
+    const STATUS_REJECTED = 0b10;//拒绝
+    const STATUS_PUBLISHED = 0b11;//发布
 
     //事件定义
     const BEFORE_PUBLISHED = 'beforePublished';
