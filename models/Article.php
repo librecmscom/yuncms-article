@@ -8,7 +8,6 @@
 namespace yuncms\article\models;
 
 use Yii;
-use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yuncms\core\ScanInterface;

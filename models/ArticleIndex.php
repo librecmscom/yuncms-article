@@ -3,6 +3,7 @@
 namespace yuncms\article\models;
 
 use Yii;
+use yii\sphinx\ActiveRecord;
 
 /**
  * This is the model class for index "article".
@@ -15,7 +16,7 @@ use Yii;
  * @property integer $category_id
  * @property integer $created_at
  */
-class ArticleIndex extends \yii\sphinx\ActiveRecord
+class ArticleIndex extends ActiveRecord
 {
     /**
      * @inheritdoc
