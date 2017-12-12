@@ -121,6 +121,7 @@ class ArticleController extends Controller
     /**
      * 文章点赞
      * @return array
+     * @throws NotFoundHttpException
      * @throws ServerErrorHttpException
      */
     public function actionSupport()
@@ -144,7 +145,11 @@ class ArticleController extends Controller
     /**
      * 收藏文章
      * @return array
+     * @throws NotFoundHttpException
      * @throws ServerErrorHttpException
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionCollection()
     {
@@ -170,6 +175,7 @@ class ArticleController extends Controller
      * @param int $id
      * @param string $uuid
      * @return string|\yii\web\Response
+     * @throws NotFoundHttpException
      */
     public function actionView($id = null, $uuid = null)
     {
@@ -180,7 +186,7 @@ class ArticleController extends Controller
         }
         if ($model && ($model->isActive || $model->isAuthor)) {
             if (!$model->isAuthor) {
-                Yii::$app->queue->push(new UpdateCounterJob(['id' => $model->id, 'field' => 'views', 'counters' => 1]));
+                Yii::$app->queue->push(new UpdateCounterJob(['id' => $model->id, 'field' => 'views', 'counter' => 1]));
             }
             return $this->render('view', [
                 'model' => $model,
